@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { createUserApi, getAllUsersApi, getUserByIdApi, updateUserApi } from "./services/coreService.js";
+
 
 const baseUrl = "http://localhost:3000";
 
@@ -23,17 +25,8 @@ function App() {
 
   const getUser = async () => {
     try {
-
-      const response = await axios.get(
-        `${baseUrl}/v1/users/get-all-users`
-      );
-
-      setUser(
-        response?.data?.result ||
-        response?.data?.data ||
-        response?.data
-      );
-
+      const response = await getAllUsersApi()
+      setUser(response?.data?.result || response?.data?.data || response?.data);
     } catch (error) {
       console.error(error);
     }
@@ -42,24 +35,12 @@ function App() {
 
   const createUser = async () => {
     try {
-
-      await axios.post(
-        `${baseUrl}/users/create-user`,
-        {
-          name,
-          email,
-          password
-        }
-      );
-
+      await createUserApi({ name, email, password })
       getUser();
-
       setName("");
       setEmail("");
       setPassword("");
-
       alert("User Created");
-
     } catch (error) {
       console.error(error);
     }
@@ -68,14 +49,9 @@ function App() {
 
   const viewUser = async (userId) => {
     try {
-
-      const response = await axios.get(
-        `${baseUrl}/v1/users/${userId}/get-user-by-id`
-      );
-
+      const response = await getUserByIdApi(userId)
       setUserDetail(response?.data?.data?.user || response?.data?.user);
       setMoreDetail(response?.data?.data?.userDetail || response?.data?.userDetail);
-
     } catch (error) {
       console.error(error);
     }
@@ -84,28 +60,11 @@ function App() {
 
   const updateUser = async () => {
     try {
-
-      console.log(editUserId);
-
-      await axios.put(
-        `${baseUrl}/v1/users/${editUserId}/update-user`,
-        {
-          name,
-          email,
-        }
-      );
-
+      const data = { name, email }
+      await updateUserApi(editUserId, data)
       alert("User Updated");
-
       getUser();
-
-      setName("");
-      setEmail("");
-
       setShowModal(false);
-
-      setEditUserId("");
-
     } catch (error) {
       console.error(error);
     }

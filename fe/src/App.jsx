@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { createUserApi, getAllUsersApi, getUserByIdApi, updateUserApi } from "./services/coreService.js";
+import { createUserApi, getAllUsersApi, getUserByIdApi, updateUserApi, deleteUserApi } from "./services/coreService.js";
 
 
 const baseUrl = "http://localhost:3000";
@@ -73,20 +73,17 @@ function App() {
 
   const deleteUser = async (userId) => {
     try {
-
-      await axios.delete(
-        `${baseUrl}/v1/users/${userId}/delete-user`
-      );
-
+      const isConfirm = window.confirm("Are you sure you want to delete this user?");
+      if (!isConfirm) {
+        return;
+      }
+      await deleteUserApi(userId)
       getUser();
-
       alert("User Deleted");
-
     } catch (error) {
       console.error(error);
     }
   };
-
   useEffect(() => {
     getUser();
   }, []);

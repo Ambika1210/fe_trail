@@ -1,9 +1,7 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { createUserApi, getAllUsersApi, getUserByIdApi, updateUserApi, deleteUserApi } from "./services/coreService.js";
+import CreateUserForm from "./components/CreateUserForm";
 
-
-const baseUrl = "http://localhost:3000";
 
 function App() {
 
@@ -79,7 +77,6 @@ function App() {
       }
       await deleteUserApi(userId)
       getUser();
-      alert("User Deleted");
     } catch (error) {
       console.error(error);
     }
@@ -90,42 +87,16 @@ function App() {
 
   return (
     <>
-      <h1>Create User</h1>
+      <CreateUserForm
+        name={name}
+        email={email}
+        password={password}
+        setName={setName}
+        setEmail={setEmail}
+        setPassword={setPassword}
+        createUser={createUser}
 
-      <input
-        type="text"
-        placeholder="Enter Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
       />
-
-      <br />
-      <br />
-
-      <input
-        type="email"
-        placeholder="Enter Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-
-      <br />
-      <br />
-
-      <input
-        type="password"
-        placeholder="Enter Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-
-      <br />
-      <br />
-
-      <button onClick={createUser}>
-        Create User
-      </button>
-
       <hr />
 
       <h1>Users Table</h1>

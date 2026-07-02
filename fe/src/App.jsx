@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { createUserApi, getAllUsersApi, getUserByIdApi, updateUserApi, deleteUserApi } from "./services/coreService.js";
 import CreateUserForm from "./components/CreateUserForm";
+import UpdateUser from "./components/UpdateUser";
 
 
 function App() {
@@ -197,42 +198,15 @@ function App() {
 
             {
               isEditMode ? (
-                <>
-
-                  <h1>Update User</h1>
-
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-
-                  <br />
-                  <br />
-
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-
-                  <br />
-                  <br />
-
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-
-                  <br />
-                  <br />
-
-                  <button onClick={updateUser}>
-                    Save Update
-                  </button>
-
-                </>
+                <UpdateUser
+                  name={name}
+                  email={email}
+                  password={password}
+                  setName={setName}
+                  setEmail={setEmail}
+                  setPassword={setPassword}
+                  updateUser={updateUser}
+                />
               ) : (
                 <>
 

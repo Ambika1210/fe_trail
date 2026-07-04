@@ -5,7 +5,8 @@ function UpdateUser({
     setName,
     setEmail,
     setPassword,
-    updateUser
+    updateUser,
+    onClose
 }) {
     return (
         <div className="w-full max-w-md mx-auto text-left">
@@ -50,12 +51,21 @@ function UpdateUser({
                     />
                 </div>
 
-                <button
-                    onClick={updateUser}
-                    className="w-full mt-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold py-3 px-6 rounded-xl shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-all duration-200 cursor-pointer text-center"
-                >
-                    Save Update
-                </button>
+                <div className="flex gap-3 mt-6">
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="flex-1 py-3 px-6 border border-gray-200 dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-800 text-gray-700 dark:text-zinc-300 font-semibold rounded-xl transition-all duration-200 cursor-pointer text-center"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        onClick={updateUser}
+                        className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold py-3 px-6 rounded-xl shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-all duration-200 cursor-pointer text-center"
+                    >
+                        Save Update
+                    </button>
+                </div>
             </div>
         </div>
     );

@@ -1,5 +1,7 @@
 
 import React from "react";
+import { Link } from "react-router-dom";
+
 
 const HomePage = () => {
     return (
@@ -12,10 +14,13 @@ const HomePage = () => {
                 </h1>
 
                 <div className="flex gap-6 text-gray-700 font-medium">
-                    <button className="hover:text-blue-500">Home</button>
-                    <button className="hover:text-blue-500">About</button>
-                    <button className="hover:text-blue-500">Services</button>
-                    <button className="hover:text-blue-500">Contact</button>
+                    <Link to="/"> <button className="hover:text-blue-500">Home</button></Link>
+                    <Link to="/about">  <button className="hover:text-blue-500">About</button></Link>
+                    <Link to="/services">  <button className="hover:text-blue-500">Services</button></Link>
+                    <Link to="/contact"> <button className="hover:text-blue-500">Contact</button></Link>
+
+                    <Link to="/my-user"> <button className="hover:text-blue-500">MyUser</button></Link>
+
                 </div>
             </nav>
 

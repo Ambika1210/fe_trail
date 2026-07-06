@@ -1,12 +1,24 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import UserPage from "./pages/UserPage";
 import HomePage from "./pages/HomePage"
+import AboutPage from "./pages/AboutPage"
+import ServicesPage from "./pages/ServicesPage"
+import ContactPage from "./pages/ContactPage"
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-50/50 dark:bg-zinc-950 py-8 px-4 sm:px-6 lg:px-8">
-      {/* <UserPage /> */}
-      <HomePage />
-    </div>
+    <BrowserRouter>
+      <Routes>
+
+
+        <Route path="/" element={<HomePage />} />
+        <Route path="/my-user" element={<UserPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/services" element={<ServicesPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+
+      </Routes>
+    </BrowserRouter>
   );
 }
 

@@ -1,18 +1,42 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { loginUserApi } from "../services/coreService";
 
 const LoginPage = () => {
+    const navigate = useNavigate();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const handleLogin = async (e) => {
         e.preventDefault();
 
-        console.log({
-            email,
-            password,
-        });
+        try {
+            const response = await loginUserApi({
+                email,
+                password,
+            });
 
-        // Yahin login API call karenge
+            console.log(response.data);
+
+            // Save Token
+            localStorage.setItem(
+                "token",
+                response.data.data.token
+            );
+
+            alert("Login Successful");
+
+            // Redirect
+            navigate("/my-user");
+
+        } catch (error) {
+            console.log(error);
+
+            alert(
+                error.response?.data?.message || "Login Failed"
+            );
+        }
     };
 
     return (
@@ -36,15 +60,25 @@ const LoginPage = () => {
                     boxShadow: "0 0 10px rgba(0,0,0,0.2)",
                 }}
             >
-                <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Login</h2>
+                <h2
+                    style={{
+                        textAlign: "center",
+                        marginBottom: "20px",
+                    }}
+                >
+                    Login
+                </h2>
 
                 <div style={{ marginBottom: "15px" }}>
                     <label>Email</label>
+
                     <input
                         type="email"
                         placeholder="Enter Email"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={(e) =>
+                            setEmail(e.target.value)
+                        }
                         style={{
                             width: "100%",
                             padding: "10px",
@@ -55,11 +89,14 @@ const LoginPage = () => {
 
                 <div style={{ marginBottom: "20px" }}>
                     <label>Password</label>
+
                     <input
                         type="password"
                         placeholder="Enter Password"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e) =>
+                            setPassword(e.target.value)
+                        }
                         style={{
                             width: "100%",
                             padding: "10px",

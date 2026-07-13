@@ -8,6 +8,8 @@ import ContactPage from "./pages/ContactPage"
 import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
 import LoginPage from "./pages/LoginPage";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 
 function App() {
   return (
@@ -17,7 +19,7 @@ function App() {
 
 
         <Route path="/" element={<HomePage />} />
-        <Route path="/my-user" element={<UserPage />} />
+        <Route path="/my-user" element={<ProtectedRoute><UserPage /> </ProtectedRoute>} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/contact" element={<ContactPage />} />

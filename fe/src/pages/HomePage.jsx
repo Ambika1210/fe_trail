@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const HomePage = () => {
     // State for Feature Tabs Showcase
@@ -94,9 +95,9 @@ const HomePage = () => {
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center gap-4">
-                        <button className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium px-8 py-3.5 rounded-xl shadow-lg shadow-blue-500/20 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer">
+                        <Link to='/login'>  <button className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium px-8 py-3.5 rounded-xl shadow-lg shadow-blue-500/20 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer">
                             Get Started Free
-                        </button>
+                        </button></Link>
                         <button className="w-full sm:w-auto bg-white hover:bg-slate-50 text-slate-700 font-medium px-8 py-3.5 rounded-xl border border-slate-200 shadow-sm transition-all duration-200 hover:-translate-y-0.5 cursor-pointer">
                             Watch Demo Video
                         </button>
@@ -205,31 +206,28 @@ const HomePage = () => {
                     <div className="flex flex-wrap justify-center gap-2 mb-12">
                         <button
                             onClick={() => setActiveTab("developer")}
-                            className={`px-6 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 cursor-pointer ${
-                                activeTab === "developer"
-                                    ? "bg-blue-600 text-white shadow-md shadow-blue-500/10"
-                                    : "bg-slate-100 hover:bg-slate-200 text-slate-600"
-                            }`}
+                            className={`px-6 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 cursor-pointer ${activeTab === "developer"
+                                ? "bg-blue-600 text-white shadow-md shadow-blue-500/10"
+                                : "bg-slate-100 hover:bg-slate-200 text-slate-600"
+                                }`}
                         >
                             🧑‍💻 Developer Tools
                         </button>
                         <button
                             onClick={() => setActiveTab("security")}
-                            className={`px-6 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 cursor-pointer ${
-                                activeTab === "security"
-                                    ? "bg-emerald-600 text-white shadow-md shadow-emerald-500/10"
-                                    : "bg-slate-100 hover:bg-slate-200 text-slate-600"
-                            }`}
+                            className={`px-6 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 cursor-pointer ${activeTab === "security"
+                                ? "bg-emerald-600 text-white shadow-md shadow-emerald-500/10"
+                                : "bg-slate-100 hover:bg-slate-200 text-slate-600"
+                                }`}
                         >
                             🛡️ Bank Security
                         </button>
                         <button
                             onClick={() => setActiveTab("analytics")}
-                            className={`px-6 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 cursor-pointer ${
-                                activeTab === "analytics"
-                                    ? "bg-purple-600 text-white shadow-md shadow-purple-500/10"
-                                    : "bg-slate-100 hover:bg-slate-200 text-slate-600"
-                            }`}
+                            className={`px-6 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 cursor-pointer ${activeTab === "analytics"
+                                ? "bg-purple-600 text-white shadow-md shadow-purple-500/10"
+                                : "bg-slate-100 hover:bg-slate-200 text-slate-600"
+                                }`}
                         >
                             📈 Live Analytics
                         </button>
@@ -497,9 +495,8 @@ const HomePage = () => {
                                             viewBox="0 0 24 24"
                                             strokeWidth={2}
                                             stroke="currentColor"
-                                            className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${
-                                                isOpen ? "rotate-180" : ""
-                                            }`}
+                                            className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""
+                                                }`}
                                         >
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                                         </svg>
@@ -507,9 +504,8 @@ const HomePage = () => {
 
                                     {/* Expanded answer element */}
                                     <div
-                                        className={`transition-all duration-200 ease-in-out ${
-                                            isOpen ? "max-h-48 border-t border-slate-100" : "max-h-0"
-                                        } overflow-hidden`}
+                                        className={`transition-all duration-200 ease-in-out ${isOpen ? "max-h-48 border-t border-slate-100" : "max-h-0"
+                                            } overflow-hidden`}
                                     >
                                         <div className="p-6 text-slate-600 leading-relaxed text-sm bg-slate-50/20">
                                             {faq.a}

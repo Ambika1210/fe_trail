@@ -1,70 +1,27 @@
-
 import { Link } from "react-router-dom";
 
 const Footer = () => {
-    return (
-        <footer className="bg-black text-white">
+  return (
+    <footer className="bg-slate-950 border-t border-slate-800 text-slate-400 text-xs py-8 px-6">
+      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div>
+          <h2 className="text-sm font-bold text-slate-100">HotelSync PMS</h2>
+          <p className="text-xs text-slate-500 mt-1">Multi-Tenant Hotel Management Platform</p>
+        </div>
 
-            {/* Main Footer */}
-            <div className="max-w-7xl mx-auto px-8 h-32 flex justify-between items-center">
+        <div className="flex gap-6 font-medium">
+          <Link to="/" className="hover:text-slate-200 transition">Home</Link>
+          <Link to="/super-admin" className="hover:text-slate-200 transition">Super Admin</Link>
+          <Link to="/hotel-panel" className="hover:text-slate-200 transition">Hotel Panel</Link>
+          <Link to="/login" className="hover:text-slate-200 transition">Login</Link>
+        </div>
 
-                {/* Left */}
-                <div className="max-w-xs">
-
-                    <h1 className="text-lg font-semibold text-blue-500">
-                        MyApp
-                    </h1>
-
-                    <p className="text-gray-400 text-xs mt-2 leading-5">
-                        Build modern and responsive web applications.
-                    </p>
-
-                </div>
-
-                {/* Center */}
-                <div className="flex flex-col gap-1 text-xs text-gray-400">
-
-                    <h2 className="text-sm font-semibold text-white mb-1">
-                        Links
-                    </h2>
-
-                    <Link to="/" className="hover:text-white">
-                        Home
-                    </Link>
-
-                    <Link to="/about" className="hover:text-white">
-                        About
-                    </Link>
-
-                    <Link to="/services" className="hover:text-white">
-                        Services
-                    </Link>
-
-                </div>
-
-                {/* Right */}
-                <div className="text-xs text-gray-400 flex flex-col gap-1">
-
-                    <h2 className="text-sm font-semibold text-white mb-1">
-                        Contact
-                    </h2>
-
-                    <p>support@myapp.com</p>
-
-                    <p>+91 9876543210</p>
-
-                </div>
-
-            </div>
-
-            {/* Bottom */}
-            <div className="border-t border-gray-800 py-2 text-center text-xs text-gray-500">
-                © 2026 MyApp. All rights reserved.
-            </div>
-
-        </footer>
-    );
+        <div className="text-slate-500 text-xs">
+          © {new Date().getFullYear()} HotelSync PMS. All rights reserved.
+        </div>
+      </div>
+    </footer>
+  );
 };
 
 export default Footer;
-

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:3000";
+const baseUrl = "https://api-hotel-5e5p.onrender.com";
 
 export const getAllUsersApi = async () => {
     const token = localStorage.getItem("token");

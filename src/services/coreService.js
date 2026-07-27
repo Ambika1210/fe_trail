@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "https://api-hotel-5e5p.onrender.com";
+const baseUrl = import.meta.env.VITE_API_BASE_URL || "https://api-hotel-5e5p.onrender.com";
 
 export const getAllUsersApi = async () => {
     const token = localStorage.getItem("token");

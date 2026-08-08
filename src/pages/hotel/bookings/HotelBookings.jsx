@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import CreateBookingModal from "./CreateBookingModal";
+import AllotRoomModal from "./AllotRoomModal";
 import { getGuestApi } from "../../../services/coreService";
 
 const HotelBookings = () => {
   const [guests, setGuests] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showAddGuestModal, setShowAddGuestModal] = useState(false);
+  const [selectedGuestForRoom, setSelectedGuestForRoom] = useState(null);
+  const [showAllotRoomModal, setShowAllotRoomModal] = useState(false);
 
   const fetchGuests = async () => {
     setLoading(true);
@@ -67,6 +70,7 @@ const HotelBookings = () => {
                 <th className="px-4 py-3">Address</th>
                 <th className="px-4 py-3">ID Type</th>
                 <th className="px-4 py-3">ID Number</th>
+                <th className="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-sky-100">
@@ -81,6 +85,17 @@ const HotelBookings = () => {
                     </span>
                   </td>
                   <td className="px-4 py-3 font-bold text-slate-700 font-mono text-xs">{g.idNumber}</td>
+                  <td className="px-4 py-3 text-right">
+                    <button
+                      onClick={() => {
+                        setSelectedGuestForRoom(g);
+                        setShowAllotRoomModal(true);
+                      }}
+                      className="px-3.5 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold rounded-xl transition shadow-md shadow-emerald-500/10 cursor-pointer"
+                    >
+                      CheckIn
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -92,6 +107,15 @@ const HotelBookings = () => {
         isOpen={showAddGuestModal}
         onClose={() => setShowAddGuestModal(false)}
         onAddGuest={handleAddGuest}
+      />
+
+      <AllotRoomModal
+        isOpen={showAllotRoomModal}
+        onClose={() => {
+          setShowAllotRoomModal(false);
+          setSelectedGuestForRoom(null);
+        }}
+        guest={selectedGuestForRoom}
       />
     </div>
   );

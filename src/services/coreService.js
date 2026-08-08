@@ -246,3 +246,17 @@ export const getGuestApi = async () => {
         }
     );
 };
+
+export const createBookingApi = async (data) => {
+    const token = localStorage.getItem("token");
+
+    return await axios.post(
+        `${baseUrl}/v1/bookings/create-booking`,
+        data,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+};

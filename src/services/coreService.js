@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = import.meta.env.VITE_API_BASE_URL || "https://api-hotel-5e5p.onrender.com";
+const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 
 export const getAllUsersApi = async () => {
     const token = localStorage.getItem("token");
@@ -212,6 +212,33 @@ export const deleteRoomApi = async (roomId) => {
 
     return await axios.delete(
         `${baseUrl}/v1/rooms/${roomId}/delete-room`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+};
+
+// Guest APIs
+export const createGuestApi = async (data) => {
+    const token = localStorage.getItem("token");
+
+    return await axios.post(
+        `${baseUrl}/v1/guests/create-guest`,
+        data,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+};
+
+export const getGuestApi = async () => {
+    const token = localStorage.getItem("token");
+    return await axios.get(
+        `${baseUrl}/v1/guests/get-all-guests`,
         {
             headers: {
                 Authorization: `Bearer ${token}`,

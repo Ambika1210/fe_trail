@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useHotelSwitch } from "../../hooks/useHotelSwitch";
 
 // Independent Self-Contained Domain Modules
@@ -8,6 +8,15 @@ import HotelRooms from "./rooms/HotelRooms";
 import HotelBookings from "./bookings/HotelBookings";
 
 const HotelPanel = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
   const { handleSwitchBack } = useHotelSwitch();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [activeHotel] = useState(() => {

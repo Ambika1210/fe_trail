@@ -1,10 +1,19 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createHotelApi, getAllHotelsApi, deleteHotelApi } from "../../services/coreService";
 import { useHotelSwitch } from "../../hooks/useHotelSwitch";
 import { toast } from "../../utils/toast.jsx";
 
 const SuperAdminPanel = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
   const { handleSwitchHotel } = useHotelSwitch();
   const [activeTab, setActiveTab] = useState("overview");
   const [hotels, setHotels] = useState([]);

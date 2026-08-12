@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { getAllRoomsApi } from "../../../services/coreService";
 
-const HotelDashboard = ({ activeHotel, onNavigateToBookings }) => {
+const HotelDashboard = ({ activeHotel }) => {
+  const navigate = useNavigate();
   const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
@@ -43,7 +45,7 @@ const HotelDashboard = ({ activeHotel, onNavigateToBookings }) => {
 
         <div className="bg-white border border-sky-100 rounded-2xl p-6 shadow-sm shadow-sky-500/5 hover:shadow-md transition">
           <div className="flex justify-between items-start mb-3">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Available (Khali)</span>
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Available</span>
             <span className="p-2 rounded-xl bg-emerald-50 text-emerald-600 text-lg">✅</span>
           </div>
           <h3 className="text-3xl font-black text-emerald-600">{availableRoomsCount}</h3>
@@ -52,7 +54,7 @@ const HotelDashboard = ({ activeHotel, onNavigateToBookings }) => {
 
         <div className="bg-white border border-sky-100 rounded-2xl p-6 shadow-sm shadow-sky-500/5 hover:shadow-md transition">
           <div className="flex justify-between items-start mb-3">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Occupied (Bhara)</span>
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Occupied</span>
             <span className="p-2 rounded-xl bg-rose-50 text-rose-600 text-lg">🔴</span>
           </div>
           <h3 className="text-3xl font-black text-rose-600">{occupiedRoomsCount}</h3>
@@ -74,7 +76,7 @@ const HotelDashboard = ({ activeHotel, onNavigateToBookings }) => {
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-base font-bold text-slate-900">Recent Guest Reservations</h3>
           <button
-            onClick={onNavigateToBookings}
+            onClick={() => navigate("/hotel-panel/bookings")}
             className="text-xs text-sky-600 hover:text-sky-700 font-bold cursor-pointer"
           >
             View All →

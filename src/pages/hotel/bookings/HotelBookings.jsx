@@ -3,6 +3,13 @@ import CreateBookingModal from "./CreateBookingModal";
 import AllotRoomModal from "./AllotRoomModal";
 import { getGuestApi } from "../../../services/coreService";
 
+const formatDate = (dateStr) => {
+  if (!dateStr) return "";
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return "";
+  return d.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
+};
+
 const HotelBookings = () => {
   const [guests, setGuests] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -67,7 +74,8 @@ const HotelBookings = () => {
               <tr>
                 <th className="px-4 py-3">Guest Name</th>
                 <th className="px-4 py-3">Mobile Number</th>
-                <th className="px-4 py-3">Address</th>
+                <th className="px-4 py-3">Room Stay</th>
+                <th className="px-4 py-3">Occupied Dates</th>
                 <th className="px-4 py-3">ID Type</th>
                 <th className="px-4 py-3">ID Number</th>
                 <th className="px-4 py-3 text-right">Actions</th>
@@ -78,7 +86,38 @@ const HotelBookings = () => {
                 <tr key={g._id} className="hover:bg-sky-50/40 transition">
                   <td className="px-4 py-3 font-bold text-slate-900">{g.name}</td>
                   <td className="px-4 py-3 font-semibold text-slate-600">{g.mobile}</td>
-                  <td className="px-4 py-3 text-slate-500">{g.address}</td>
+                  <td className="px-4 py-3 text-xs">
+                    {g.booking ? (
+                      <div className="flex flex-col gap-1">
+                        <span className="font-bold text-slate-800">
+                          Room #{g.booking.roomId?.roomNumber || "Unassigned"}
+                        </span>
+                        <span>
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold border ${
+                            g.booking.bookingStatus === "CHECKED_IN"
+                              ? "bg-rose-50 text-rose-700 border-rose-200"
+                              : g.booking.bookingStatus === "BOOKED"
+                              ? "bg-sky-50 text-sky-700 border-sky-200"
+                              : "bg-slate-50 text-slate-600 border-slate-200"
+                          }`}>
+                            {g.booking.bookingStatus === "CHECKED_IN" ? "Occupied" : g.booking.bookingStatus}
+                          </span>
+                        </span>
+                      </div>
+                    ) : (
+                      <span className="text-slate-400 font-semibold italic">No Active Stay</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-xs font-semibold text-slate-600">
+                    {g.booking ? (
+                      <div className="flex flex-col gap-0.5 font-mono">
+                        <span className="text-[11px] text-emerald-600 font-bold">In: {formatDate(g.booking.checkIn)}</span>
+                        <span className="text-[11px] text-rose-600 font-bold">Out: {formatDate(g.booking.checkOut)}</span>
+                      </div>
+                    ) : (
+                      <span className="text-slate-400 font-mono">-</span>
+                    )}
+                  </td>
                   <td className="px-4 py-3">
                     <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 text-xs font-bold font-mono">
                       {g.idType}

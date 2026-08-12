@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { createGuestApi } from "../../../services/coreService";
+import { useState, useEffect } from "react";
+import { createGuestApi, getAllRoomsApi, createBookingApi } from "../../../services/coreService";
 import { toast } from "../../../utils/toast.jsx";
 
 const CreateBookingModal = ({ isOpen, onClose, onAddGuest }) => {
@@ -11,6 +11,42 @@ const CreateBookingModal = ({ isOpen, onClose, onAddGuest }) => {
     idNumber: "",
   });
   const [loading, setLoading] = useState(false);
+  const [assignRoom, setAssignRoom] = useState(false);
+  const [rooms, setRooms] = useState([]);
+  const [loadingRooms, setLoadingRooms] = useState(false);
+  const [bookingData, setBookingData] = useState({
+    roomId: "",
+    checkIn: new Date().toISOString().split("T")[0],
+    checkOut: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+  });
+
+  const activeHotelStr = localStorage.getItem("activeHotel");
+  const activeHotel = activeHotelStr ? JSON.parse(activeHotelStr) : null;
+  const hotelId = activeHotel?._id;
+
+  useEffect(() => {
+    if (isOpen && hotelId && assignRoom) {
+      const fetchRooms = async () => {
+        setLoadingRooms(true);
+        try {
+          const response = await getAllRoomsApi(hotelId);
+          if (response.data && response.data.data) {
+            const availableRooms = response.data.data.filter((r) => !r.isOccupied);
+            setRooms(availableRooms);
+            if (availableRooms.length > 0) {
+              setBookingData((prev) => ({ ...prev, roomId: availableRooms[0]._id }));
+            }
+          }
+        } catch (err) {
+          console.error("Failed to fetch rooms", err);
+          toast.error("Failed to load rooms.");
+        } finally {
+          setLoadingRooms(false);
+        }
+      };
+      fetchRooms();
+    }
+  }, [isOpen, hotelId, assignRoom]);
 
   if (!isOpen) return null;
 
@@ -21,28 +57,50 @@ const CreateBookingModal = ({ isOpen, onClose, onAddGuest }) => {
       return;
     }
 
+    if (assignRoom && (!bookingData.roomId || !bookingData.checkIn || !bookingData.checkOut)) {
+      toast.error("Please fill all room stay details");
+      return;
+    }
+
     try {
-      const activeHotelStr = localStorage.getItem("activeHotel");
-      if (!activeHotelStr) {
-        toast.error("No active hotel selected.");
-        return;
-      }
-      const activeHotel = JSON.parse(activeHotelStr);
-      const hotelId = activeHotel?._id;
       if (!hotelId) {
         toast.error("Active hotel ID not found.");
         return;
       }
 
       setLoading(true);
-      const response = await createGuestApi({
+      // 1. Create Guest
+      const guestResponse = await createGuestApi({
         ...guestData,
         hotelId,
       });
 
-      if (response.data && response.data.success) {
-        toast.success(response.data.message || "Guest created successfully");
-        onAddGuest(response.data.data);
+      if (guestResponse.data && guestResponse.data.success) {
+        const newGuest = guestResponse.data.data;
+        
+        // 2. Allot Room & Check-In if requested
+        if (assignRoom) {
+          const bookingResponse = await createBookingApi({
+            hotelId,
+            guestId: newGuest._id,
+            roomId: bookingData.roomId,
+            checkIn: bookingData.checkIn,
+            checkOut: bookingData.checkOut,
+          });
+
+          if (bookingResponse.data && bookingResponse.data.success) {
+            toast.success("Guest created and Room allotted successfully!");
+          } else {
+            toast.warning("Guest created, but room allotment failed.");
+          }
+        } else {
+          toast.success(guestResponse.data.message || "Guest created successfully");
+        }
+
+        // Trigger parent callback to refresh list
+        onAddGuest(newGuest);
+
+        // Reset state values
         setGuestData({
           name: "",
           mobile: "",
@@ -50,11 +108,17 @@ const CreateBookingModal = ({ isOpen, onClose, onAddGuest }) => {
           idType: "AADHAAR",
           idNumber: "",
         });
+        setAssignRoom(false);
+        setBookingData({
+          roomId: "",
+          checkIn: new Date().toISOString().split("T")[0],
+          checkOut: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+        });
         onClose();
       }
     } catch (err) {
       console.error(err);
-      toast.error(err.response?.data?.message || "Failed to create guest");
+      toast.error(err.response?.data?.message || "Failed to submit request");
     } finally {
       setLoading(false);
     }
@@ -142,6 +206,73 @@ const CreateBookingModal = ({ isOpen, onClose, onAddGuest }) => {
               />
             </div>
           </div>
+
+          {/* Assign Room Checkbox Toggle */}
+          <div className="pt-2 border-t border-sky-50 flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="assignRoomToggle"
+              checked={assignRoom}
+              onChange={(e) => setAssignRoom(e.target.checked)}
+              disabled={loading}
+              className="w-4 h-4 text-sky-500 border-slate-300 rounded focus:ring-sky-500 cursor-pointer"
+            />
+            <label htmlFor="assignRoomToggle" className="text-xs text-slate-700 font-extrabold cursor-pointer select-none">
+              Assign Room & Check In Now?
+            </label>
+          </div>
+
+          {/* Collapsible Room Allotment Fields */}
+          {assignRoom && (
+            <div className="space-y-3.5 p-4 bg-sky-50/50 rounded-2xl border border-sky-100/50">
+              <div>
+                <label className="text-xs text-slate-600 font-bold block mb-1">Select Available Room *</label>
+                {loadingRooms ? (
+                  <div className="text-xs text-slate-400 py-2">Loading available rooms...</div>
+                ) : rooms.length === 0 ? (
+                  <div className="text-xs font-semibold text-rose-500 py-1">No available rooms found!</div>
+                ) : (
+                  <select
+                    disabled={loading}
+                    value={bookingData.roomId}
+                    onChange={(e) => setBookingData({ ...bookingData, roomId: e.target.value })}
+                    className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-sky-500 transition"
+                  >
+                    {rooms.map((r) => (
+                      <option key={r._id} value={r._id}>
+                        Room #{r.roomNumber} - {r.roomType || "Standard"} (₹{r.price}/night)
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs text-slate-600 font-bold block mb-1">Check-In Date *</label>
+                  <input
+                    type="date"
+                    required={assignRoom}
+                    disabled={loading}
+                    value={bookingData.checkIn}
+                    onChange={(e) => setBookingData({ ...bookingData, checkIn: e.target.value })}
+                    className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-sky-500 transition"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-slate-600 font-bold block mb-1">Check-Out Date *</label>
+                  <input
+                    type="date"
+                    required={assignRoom}
+                    disabled={loading}
+                    value={bookingData.checkOut}
+                    onChange={(e) => setBookingData({ ...bookingData, checkOut: e.target.value })}
+                    className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-sky-500 transition"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="flex gap-3 pt-2">
             <button

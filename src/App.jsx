@@ -6,6 +6,7 @@ import HotelPanel from "./pages/hotel/HotelPanel";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { ToastContainer } from "./utils/toast.jsx";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const location = useLocation();
@@ -27,8 +28,22 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
 
           {/* Dedicated Subfolder Panels */}
-          <Route path="/super-admin" element={<SuperAdminPanel />} />
-          <Route path="/hotel-panel" element={<HotelPanel />} />
+          <Route 
+            path="/super-admin/*" 
+            element={
+              <ProtectedRoute requiredRole="SUPER_ADMIN">
+                <SuperAdminPanel />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/hotel-panel/*" 
+            element={
+              <ProtectedRoute requiredRole="HOTEL_ADMIN">
+                <HotelPanel />
+              </ProtectedRoute>
+            } 
+          />
         </Routes>
       </main>
 

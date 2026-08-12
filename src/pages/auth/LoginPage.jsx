@@ -19,6 +19,10 @@ const LoginPage = () => {
       if (response.data?.data?.token) {
         localStorage.setItem("token", response.data.data.token);
       }
+      if (response.data?.data?.user) {
+        localStorage.setItem("role", response.data.data.user.role);
+        localStorage.setItem("user", JSON.stringify(response.data.data.user));
+      }
       toast.success("Login Successful!");
       
       // Auto route based on role

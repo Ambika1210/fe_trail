@@ -27,11 +27,11 @@ const HotelRooms = ({ activeHotel }) => {
     fetchRooms();
   }, [activeHotel]);
 
-  // Toggle Room Occupied Status (Khali / Bhara)
+  // Toggle Room Occupied Status
   const handleToggleOccupied = async (roomId, currentOccupied) => {
     try {
       await updateRoomApi(roomId, { isOccupied: !currentOccupied });
-      toast.success(`Room status updated to ${!currentOccupied ? 'Occupied (Bhara)' : 'Available (Khali)'}`);
+      toast.success(`Room status updated to ${!currentOccupied ? 'Occupied' : 'Available'}`);
       fetchRooms();
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to update room status");
@@ -80,43 +80,54 @@ const HotelRooms = ({ activeHotel }) => {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {rooms.map((r) => (
-            <div key={r._id} className="bg-slate-50 border border-sky-100 rounded-2xl p-5 hover:bg-sky-50/50 transition relative group shadow-xs">
-              <div className="flex justify-between items-start mb-3">
-                <div>
-                  <span className="text-xs text-sky-600 font-bold uppercase tracking-wider block">Room Number</span>
-                  <span className="text-xl font-black text-slate-900">#{r.roomNumber}</span>
-                </div>
-                <button
-                  onClick={() => handleToggleOccupied(r._id, r.isOccupied)}
-                  className={`px-3 py-1 rounded-full text-xs font-bold border transition cursor-pointer flex items-center gap-1.5 ${
-                    r.isOccupied
-                      ? "bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100"
-                      : "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100"
-                  }`}
-                >
-                  <span className={`w-2 h-2 rounded-full ${r.isOccupied ? "bg-rose-500" : "bg-emerald-500"}`}></span>
-                  {r.isOccupied ? "Occupied (Bhara)" : "Available (Khali)"}
-                </button>
-              </div>
-
-              <div className="space-y-1 mb-4">
-                <p className="text-xs text-slate-600 font-semibold">{r.roomType || "Standard Room"}</p>
-                <p className="text-base font-extrabold text-sky-600">₹{r.price} <span className="text-xs text-slate-400 font-normal">/ night</span></p>
-              </div>
-
-              <div className="pt-3 border-t border-sky-100 flex justify-between items-center text-xs">
-                <span className="text-slate-400 font-mono text-[11px]">ID: {r._id.slice(-6)}</span>
-                <button
-                  onClick={() => handleDeleteRoom(r._id)}
-                  className="text-rose-600 hover:text-rose-700 font-bold px-2 py-1 bg-rose-50 hover:bg-rose-100 rounded-lg border border-rose-200 transition cursor-pointer"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
+        <div className="overflow-x-auto border border-sky-100 rounded-xl">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b border-sky-100 bg-sky-50/50">
+                <th className="py-2 px-3 text-xs font-bold text-slate-700 uppercase tracking-wider">Room Number</th>
+                <th className="py-2 px-3 text-xs font-bold text-slate-700 uppercase tracking-wider">Type</th>
+                <th className="py-2 px-3 text-xs font-bold text-slate-700 uppercase tracking-wider">Price / Night</th>
+                <th className="py-2 px-3 text-xs font-bold text-slate-700 uppercase tracking-wider">Status</th>
+                <th className="py-2 px-3 text-xs font-bold text-slate-700 uppercase tracking-wider text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-sky-50">
+              {rooms.map((r) => (
+                <tr key={r._id} className="hover:bg-sky-50/30 transition-colors">
+                  <td className="py-2 px-3 text-sm font-bold text-slate-900">
+                    #{r.roomNumber}
+                  </td>
+                  <td className="py-2 px-3 text-sm text-slate-600">
+                    {r.roomType || "Standard Room"}
+                  </td>
+                  <td className="py-2 px-3 text-sm font-extrabold text-sky-600">
+                    ₹{r.price}
+                  </td>
+                  <td className="py-2 px-3">
+                    <button
+                      onClick={() => handleToggleOccupied(r._id, r.isOccupied)}
+                      className={`px-2.5 py-0.5 rounded-full text-xs font-bold border transition cursor-pointer inline-flex items-center gap-1.5 ${
+                        r.isOccupied
+                          ? "bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100"
+                          : "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100"
+                      }`}
+                    >
+                      <span className={`w-1.5 h-1.5 rounded-full ${r.isOccupied ? "bg-rose-500" : "bg-emerald-500"}`}></span>
+                      {r.isOccupied ? "Occupied" : "Available"}
+                    </button>
+                  </td>
+                  <td className="py-2 px-3 text-right">
+                    <button
+                      onClick={() => handleDeleteRoom(r._id)}
+                      className="text-rose-600 hover:text-rose-700 font-bold px-2.5 py-1 bg-rose-50 hover:bg-rose-100 rounded-lg border border-rose-200 transition cursor-pointer text-xs"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
 

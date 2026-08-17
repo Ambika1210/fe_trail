@@ -273,3 +273,33 @@ export const getBookingsByGuestApi = async (guestId) => {
         }
     );
 };
+
+export const getAllBookingsApi = async (hotelId, date = "", type = "") => {
+    const token = localStorage.getItem("token");
+    let url = `${baseUrl}/v1/bookings/get-all-bookings?hotelId=${hotelId}`;
+    if (date) url += `&date=${date}`;
+    if (type) url += `&type=${type}`;
+
+    return await axios.get(
+        url,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+};
+
+export const updateBookingStatusApi = async (bookingId, status) => {
+    const token = localStorage.getItem("token");
+
+    return await axios.patch(
+        `${baseUrl}/v1/bookings/${bookingId}/update-status`,
+        { bookingStatus: status },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+};

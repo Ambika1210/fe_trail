@@ -1,5 +1,37 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { toast } from "../../../utils/toast.jsx";
+import {
+  MdDashboard,
+  MdPeople,
+  MdKingBed,
+  MdAdminPanelSettings,
+  MdArrowBack,
+  MdLogout,
+  MdReceiptLong,
+} from "react-icons/md";
+
+const navItems = [
+  {
+    label: "Hotel Dashboard",
+    path: "/hotel-panel/dashboard",
+    icon: MdDashboard,
+  },
+  {
+    label: "Guests List",
+    path: "/hotel-panel/guests",
+    icon: MdPeople,
+  },
+  {
+    label: "Rooms Management",
+    path: "/hotel-panel/rooms",
+    icon: MdKingBed,
+  },
+  {
+    label: "Bookings",
+    path: "/hotel-panel/bookings",
+    icon: MdReceiptLong,
+  }
+];
 
 const Sidebar = ({ activeHotel, handleSwitchBack }) => {
   const navigate = useNavigate();
@@ -9,6 +41,7 @@ const Sidebar = ({ activeHotel, handleSwitchBack }) => {
     toast.success("Logged out successfully");
     navigate("/login");
   };
+
   const getNavLinkClass = ({ isActive }) =>
     `w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs transition-all whitespace-nowrap ${isActive
       ? "bg-sky-50 text-sky-600 border border-sky-200/80 font-bold shadow-xs"
@@ -35,26 +68,19 @@ const Sidebar = ({ activeHotel, handleSwitchBack }) => {
 
         {/* Module Links */}
         <nav className="space-y-1">
-          <NavLink to="/hotel-panel/dashboard" className={getNavLinkClass}>
-            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-            </svg>
-            Hotel Dashboard
-          </NavLink>
-
-          <NavLink to="/hotel-panel/bookings" className={getNavLinkClass}>
-            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            Guests List
-          </NavLink>
-
-          <NavLink to="/hotel-panel/rooms" className={getNavLinkClass}>
-            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h5m-5 0v-4m0 4h5m-5 0v-4m5 4v-4m-5-4h5" />
-            </svg>
-            Rooms Management
-          </NavLink>
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                className={getNavLinkClass}
+              >
+                <Icon className="w-4 h-4 flex-shrink-0" />
+                {item.label}
+              </NavLink>
+            );
+          })}
         </nav>
       </div>
 
@@ -65,7 +91,8 @@ const Sidebar = ({ activeHotel, handleSwitchBack }) => {
             onClick={handleSwitchBack}
             className="w-full flex items-center justify-center gap-1.5 text-[11px] text-sky-700 hover:text-sky-800 bg-sky-100 hover:bg-sky-200 border border-sky-200 px-2 py-2 rounded-lg transition font-bold cursor-pointer"
           >
-            🛡️ Switch to Super Admin
+            <MdAdminPanelSettings className="w-3.5 h-3.5 flex-shrink-0" />
+            Switch to Super Admin
           </button>
         )}
 
@@ -73,9 +100,7 @@ const Sidebar = ({ activeHotel, handleSwitchBack }) => {
           to="/"
           className="flex items-center gap-1.5 text-[11px] text-slate-500 hover:text-sky-600 px-2 py-1.5 rounded-lg hover:bg-sky-50 transition font-medium"
         >
-          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
+          <MdArrowBack className="w-3.5 h-3.5 flex-shrink-0" />
           Back to Public Website
         </Link>
 
@@ -83,9 +108,7 @@ const Sidebar = ({ activeHotel, handleSwitchBack }) => {
           onClick={handleLogout}
           className="w-full flex items-center gap-1.5 text-[11px] text-rose-600 hover:text-rose-700 px-2 py-1.5 rounded-lg hover:bg-rose-50 transition font-bold cursor-pointer"
         >
-          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-          </svg>
+          <MdLogout className="w-3.5 h-3.5 flex-shrink-0" />
           Logout
         </button>
       </div>

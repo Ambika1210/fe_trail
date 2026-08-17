@@ -11,6 +11,7 @@ import Header from "./components/Header";
 import HotelDashboard from "./dashboard/HotelDashboard";
 import HotelRooms from "./rooms/HotelRooms";
 import HotelBookings from "./bookings/HotelBookings";
+import BookingManagement from "./bookingManagement/BookingManagement";
 
 const HotelPanel = () => {
   const navigate = useNavigate();
@@ -40,7 +41,8 @@ const HotelPanel = () => {
       <Routes>
         <Route path="/" element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<HotelDashboard activeHotel={activeHotel} />} />
-        <Route path="bookings" element={<HotelBookings />} />
+        <Route path="bookings" element={<BookingManagement />} />
+        <Route path="guests" element={<HotelBookings />} />
         <Route path="rooms" element={<HotelRooms activeHotel={activeHotel} />} />
       </Routes>
     </PanelLayout>

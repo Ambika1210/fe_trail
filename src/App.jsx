@@ -39,7 +39,7 @@ function App() {
           <Route 
             path="/hotel-panel/*" 
             element={
-              <ProtectedRoute requiredRole="HOTEL_ADMIN">
+              <ProtectedRoute requiredRole="ADMIN">
                 <HotelPanel />
               </ProtectedRoute>
             } 

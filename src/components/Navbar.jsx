@@ -23,22 +23,6 @@ const Navbar = () => {
         </Link>
 
         <Link
-          to="/super-admin"
-          className="px-3 py-1.5 rounded-lg bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 hover:bg-indigo-600/30 transition duration-200 flex items-center gap-1.5"
-        >
-          <span className="w-2 h-2 rounded-full bg-indigo-400"></span>
-          Super Admin Panel
-        </Link>
-
-        <Link
-          to="/hotel-panel"
-          className="px-3 py-1.5 rounded-lg bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-600/30 transition duration-200 flex items-center gap-1.5"
-        >
-          <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-          Hotel Panel
-        </Link>
-
-        <Link
           to="/login"
           className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold shadow-md shadow-blue-600/20 transition duration-200"
         >

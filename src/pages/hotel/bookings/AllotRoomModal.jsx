@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { getAllRoomsApi, createBookingApi } from "../../../services/coreService";
 import { toast } from "../../../utils/toast.jsx";
 
-const AllotRoomModal = ({ isOpen, onClose, guest }) => {
+const AllotRoomModal = ({ isOpen, onClose, guest, onRoomAllotted }) => {
   const [rooms, setRooms] = useState([]);
   const [loadingRooms, setLoadingRooms] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -64,6 +64,9 @@ const AllotRoomModal = ({ isOpen, onClose, guest }) => {
       const response = await createBookingApi(payload);
       if (response.data && response.data.success) {
         toast.success("Room allotted successfully!");
+        if (onRoomAllotted) {
+          onRoomAllotted();
+        }
         onClose();
       }
     } catch (err) {

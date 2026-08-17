@@ -1,6 +1,14 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { toast } from "../../../utils/toast.jsx";
 
 const SuperAdminSidebar = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.clear();
+    toast.success("Logged out successfully");
+    navigate("/login");
+  };
   const getNavLinkClass = ({ isActive }) =>
     `w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs transition-all whitespace-nowrap ${
       isActive
@@ -48,7 +56,7 @@ const SuperAdminSidebar = () => {
       </div>
 
       {/* Footer / Back home */}
-      <div className="pt-3 border-t border-sky-100">
+      <div className="pt-3 border-t border-sky-100 space-y-1">
         <Link
           to="/"
           className="flex items-center gap-1.5 text-[11px] text-slate-500 hover:text-sky-600 px-2 py-1.5 rounded-lg hover:bg-sky-50 transition font-medium"
@@ -58,6 +66,15 @@ const SuperAdminSidebar = () => {
           </svg>
           Back to Public Website
         </Link>
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-1.5 text-[11px] text-rose-600 hover:text-rose-700 px-2 py-1.5 rounded-lg hover:bg-rose-50 transition font-bold cursor-pointer"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          Logout
+        </button>
       </div>
     </aside>
   );

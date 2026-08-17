@@ -260,3 +260,16 @@ export const createBookingApi = async (data) => {
         }
     );
 };
+
+export const getBookingsByGuestApi = async (guestId) => {
+    const token = localStorage.getItem("token");
+
+    return await axios.get(
+        `${baseUrl}/v1/bookings/get-bookings-by-guest/${guestId}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+};

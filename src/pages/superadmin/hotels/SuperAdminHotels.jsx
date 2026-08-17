@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { createHotelApi, getAllHotelsApi, deleteHotelApi } from "../../../services/coreService";
+import { createHotelApi, getAllHotelsApi, deleteHotelApi, createUserApi } from "../../../services/coreService";
 import { useHotelSwitch } from "../../../hooks/useHotelSwitch";
 import { toast } from "../../../utils/toast.jsx";
 
@@ -11,6 +11,10 @@ const SuperAdminHotels = () => {
   const [showAddHotelModal, setShowAddHotelModal] = useState(false);
   const [newHotel, setNewHotel] = useState({ name: "", address: "" });
   const [submitting, setSubmitting] = useState(false);
+
+  const [selectedHotelForAdmin, setSelectedHotelForAdmin] = useState(null);
+  const [adminForm, setAdminForm] = useState({ name: "", email: "", password: "" });
+  const [adminSubmitting, setAdminSubmitting] = useState(false);
 
   // Fetch hotels from Backend API
   const fetchHotels = async () => {
@@ -65,6 +69,34 @@ const SuperAdminHotels = () => {
       } catch (err) {
         toast.error(err.response?.data?.message || "Failed to delete hotel");
       }
+    }
+  };
+
+  // Handle Add Admin Submit
+  const handleAddAdminSubmit = async (e) => {
+    e.preventDefault();
+    if (!adminForm.name || !adminForm.email || !adminForm.password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    setAdminSubmitting(true);
+    try {
+      await createUserApi({
+        name: adminForm.name,
+        email: adminForm.email,
+        password: adminForm.password,
+        role: "ADMIN",
+        hotelId: selectedHotelForAdmin._id,
+      });
+
+      toast.success(`Admin user created successfully for ${selectedHotelForAdmin.name}!`);
+      setAdminForm({ name: "", email: "", password: "" });
+      setSelectedHotelForAdmin(null);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to create admin user");
+    } finally {
+      setAdminSubmitting(false);
     }
   };
 
@@ -123,6 +155,15 @@ const SuperAdminHotels = () => {
                     </td>
                     <td className="py-2 px-3 text-right">
                       <div className="flex justify-end gap-2">
+                        <button
+                          onClick={() => {
+                            setSelectedHotelForAdmin(h);
+                            setAdminForm({ name: "", email: "", password: "" });
+                          }}
+                          className="text-xs bg-indigo-500 hover:bg-indigo-600 text-white font-bold px-3 py-1.5 rounded-lg shadow-sm shadow-indigo-500/20 transition cursor-pointer flex items-center gap-1"
+                        >
+                          <span>👤</span> Add Admin
+                        </button>
                         <button
                           onClick={() => handleSwitchHotel(h._id)}
                           className="text-xs bg-sky-500 hover:bg-sky-600 text-white font-bold px-3 py-1.5 rounded-lg shadow-sm shadow-sky-500/20 transition cursor-pointer flex items-center gap-1"
@@ -196,6 +237,77 @@ const SuperAdminHotels = () => {
                   className="flex-1 py-2.5 bg-sky-500 hover:bg-sky-600 text-white text-xs font-bold rounded-xl transition shadow-md shadow-sky-500/20 disabled:opacity-50 cursor-pointer"
                 >
                   {submitting ? "Creating..." : "Create Hotel"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Add Admin Modal */}
+      {selectedHotelForAdmin && (
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+          <div className="bg-white border border-sky-100 rounded-2xl w-full max-w-md p-6 shadow-2xl">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-bold text-slate-900">Add Admin for {selectedHotelForAdmin.name}</h3>
+              <button
+                onClick={() => setSelectedHotelForAdmin(null)}
+                className="text-slate-400 hover:text-slate-600 text-lg font-bold cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+            <form onSubmit={handleAddAdminSubmit} className="space-y-4">
+              <div>
+                <label className="text-xs text-slate-600 font-bold block mb-1">Admin Name *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. John Doe"
+                  value={adminForm.name}
+                  onChange={(e) => setAdminForm({ ...adminForm, name: e.target.value })}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-sky-500 focus:bg-white transition"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs text-slate-600 font-bold block mb-1">Admin Email *</label>
+                <input
+                  type="email"
+                  required
+                  placeholder="e.g. admin@hotel.com"
+                  value={adminForm.email}
+                  onChange={(e) => setAdminForm({ ...adminForm, email: e.target.value })}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-sky-500 focus:bg-white transition"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs text-slate-600 font-bold block mb-1">Password *</label>
+                <input
+                  type="password"
+                  required
+                  placeholder="••••••••"
+                  value={adminForm.password}
+                  onChange={(e) => setAdminForm({ ...adminForm, password: e.target.value })}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-sky-500 focus:bg-white transition"
+                />
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setSelectedHotelForAdmin(null)}
+                  className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold rounded-xl transition cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={adminSubmitting}
+                  className="flex-1 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-bold rounded-xl transition shadow-md shadow-indigo-500/20 disabled:opacity-50 cursor-pointer"
+                >
+                  {adminSubmitting ? "Adding..." : "Add Admin"}
                 </button>
               </div>
             </form>

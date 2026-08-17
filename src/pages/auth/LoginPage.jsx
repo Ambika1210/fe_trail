@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { loginUserApi } from "../../services/coreService";
 import { toast } from "../../utils/toast.jsx";
 
@@ -83,24 +83,6 @@ const LoginPage = () => {
             {loading ? "Signing In..." : "Sign In"}
           </button>
         </form>
-
-        <div className="mt-8 pt-6 border-t border-sky-100 text-center">
-          <p className="text-xs text-slate-500 mb-3 font-medium">Quick Demo Access:</p>
-          <div className="flex gap-2 justify-center">
-            <Link
-              to="/super-admin"
-              className="px-3.5 py-2 bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 rounded-xl text-xs font-semibold transition"
-            >
-              Super Admin Panel →
-            </Link>
-            <Link
-              to="/hotel-panel"
-              className="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-xl text-xs font-semibold transition"
-            >
-              Hotel Panel →
-            </Link>
-          </div>
-        </div>
       </div>
     </div>
   );

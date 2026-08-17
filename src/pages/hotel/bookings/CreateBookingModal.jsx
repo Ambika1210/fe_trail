@@ -128,10 +128,10 @@ const CreateBookingModal = ({ isOpen, onClose, onAddGuest }) => {
     <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
       <div className="bg-white border border-sky-100 rounded-2xl w-full max-w-md p-6 shadow-2xl">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-bold text-slate-900">New Guest Entry</h3>
+          <h3 className="text-lg font-medium text-slate-900">New Guest Entry</h3>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 text-lg font-bold cursor-pointer"
+            className="text-slate-400 hover:text-slate-600 text-lg font-medium cursor-pointer"
             disabled={loading}
           >
             ✕
@@ -140,7 +140,7 @@ const CreateBookingModal = ({ isOpen, onClose, onAddGuest }) => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="text-xs text-slate-600 font-bold block mb-1">Guest Full Name *</label>
+            <label className="text-xs text-slate-600 font-medium block mb-1">Guest Full Name *</label>
             <input
               type="text"
               required
@@ -153,7 +153,7 @@ const CreateBookingModal = ({ isOpen, onClose, onAddGuest }) => {
           </div>
 
           <div>
-            <label className="text-xs text-slate-600 font-bold block mb-1">Mobile Number *</label>
+            <label className="text-xs text-slate-600 font-medium block mb-1">Mobile Number *</label>
             <input
               type="tel"
               required
@@ -166,7 +166,7 @@ const CreateBookingModal = ({ isOpen, onClose, onAddGuest }) => {
           </div>
 
           <div>
-            <label className="text-xs text-slate-600 font-bold block mb-1">Address *</label>
+            <label className="text-xs text-slate-600 font-medium block mb-1">Address *</label>
             <input
               type="text"
               required
@@ -180,7 +180,7 @@ const CreateBookingModal = ({ isOpen, onClose, onAddGuest }) => {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs text-slate-600 font-bold block mb-1">ID Type *</label>
+              <label className="text-xs text-slate-600 font-medium block mb-1">ID Type *</label>
               <select
                 disabled={loading}
                 value={guestData.idType}
@@ -194,7 +194,7 @@ const CreateBookingModal = ({ isOpen, onClose, onAddGuest }) => {
               </select>
             </div>
             <div>
-              <label className="text-xs text-slate-600 font-bold block mb-1">ID Number *</label>
+              <label className="text-xs text-slate-600 font-medium block mb-1">ID Number *</label>
               <input
                 type="text"
                 required
@@ -217,7 +217,7 @@ const CreateBookingModal = ({ isOpen, onClose, onAddGuest }) => {
               disabled={loading}
               className="w-4 h-4 text-sky-500 border-slate-300 rounded focus:ring-sky-500 cursor-pointer"
             />
-            <label htmlFor="assignRoomToggle" className="text-xs text-slate-700 font-extrabold cursor-pointer select-none">
+            <label htmlFor="assignRoomToggle" className="text-xs text-slate-700 font-medium cursor-pointer select-none">
               Assign Room & Check In Now?
             </label>
           </div>
@@ -226,7 +226,7 @@ const CreateBookingModal = ({ isOpen, onClose, onAddGuest }) => {
           {assignRoom && (
             <div className="space-y-3.5 p-4 bg-sky-50/50 rounded-2xl border border-sky-100/50">
               <div>
-                <label className="text-xs text-slate-600 font-bold block mb-1">Select Available Room *</label>
+                <label className="text-xs text-slate-600 font-medium block mb-1">Select Available Room *</label>
                 {loadingRooms ? (
                   <div className="text-xs text-slate-400 py-2">Loading available rooms...</div>
                 ) : rooms.length === 0 ? (
@@ -249,7 +249,7 @@ const CreateBookingModal = ({ isOpen, onClose, onAddGuest }) => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-xs text-slate-600 font-bold block mb-1">Check-In Date *</label>
+                  <label className="text-xs text-slate-600 font-medium block mb-1">Check-In Date *</label>
                   <input
                     type="date"
                     required={assignRoom}
@@ -260,7 +260,7 @@ const CreateBookingModal = ({ isOpen, onClose, onAddGuest }) => {
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-slate-600 font-bold block mb-1">Check-Out Date *</label>
+                  <label className="text-xs text-slate-600 font-medium block mb-1">Check-Out Date *</label>
                   <input
                     type="date"
                     required={assignRoom}
@@ -279,14 +279,14 @@ const CreateBookingModal = ({ isOpen, onClose, onAddGuest }) => {
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold rounded-xl transition cursor-pointer disabled:opacity-50"
+              className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-semibold rounded-xl transition cursor-pointer disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 py-2.5 bg-sky-500 hover:bg-sky-600 text-white text-xs font-bold rounded-xl transition shadow-md shadow-sky-500/20 cursor-pointer disabled:opacity-50"
+              className="flex-1 py-2.5 bg-sky-500 hover:bg-sky-600 text-white text-xs font-semibold rounded-xl transition shadow-md shadow-sky-500/20 cursor-pointer disabled:opacity-50"
             >
               {loading ? "Saving..." : "Confirm Guest"}
             </button>

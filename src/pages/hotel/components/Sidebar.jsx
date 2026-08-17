@@ -1,11 +1,18 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { toast } from "../../../utils/toast.jsx";
 
 const Sidebar = ({ activeHotel, handleSwitchBack }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.clear();
+    toast.success("Logged out successfully");
+    navigate("/login");
+  };
   const getNavLinkClass = ({ isActive }) =>
-    `w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs transition-all whitespace-nowrap ${
-      isActive
-        ? "bg-sky-50 text-sky-600 border border-sky-200/80 font-bold shadow-xs"
-        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium"
+    `w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs transition-all whitespace-nowrap ${isActive
+      ? "bg-sky-50 text-sky-600 border border-sky-200/80 font-bold shadow-xs"
+      : "text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium"
     }`;
 
   return (
@@ -39,7 +46,7 @@ const Sidebar = ({ activeHotel, handleSwitchBack }) => {
             <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            Bookings & Guests
+            Guests List
           </NavLink>
 
           <NavLink to="/hotel-panel/rooms" className={getNavLinkClass}>
@@ -53,12 +60,14 @@ const Sidebar = ({ activeHotel, handleSwitchBack }) => {
 
       {/* Back link & Switch to Super Admin */}
       <div className="pt-3 border-t border-sky-100 space-y-1.5">
-        <button
-          onClick={handleSwitchBack}
-          className="w-full flex items-center justify-center gap-1.5 text-[11px] text-sky-700 hover:text-sky-800 bg-sky-100 hover:bg-sky-200 border border-sky-200 px-2 py-2 rounded-lg transition font-bold cursor-pointer"
-        >
-          🛡️ Switch to Super Admin
-        </button>
+        {localStorage.getItem("originalRole") === "SUPER_ADMIN" && (
+          <button
+            onClick={handleSwitchBack}
+            className="w-full flex items-center justify-center gap-1.5 text-[11px] text-sky-700 hover:text-sky-800 bg-sky-100 hover:bg-sky-200 border border-sky-200 px-2 py-2 rounded-lg transition font-bold cursor-pointer"
+          >
+            🛡️ Switch to Super Admin
+          </button>
+        )}
 
         <Link
           to="/"
@@ -69,6 +78,16 @@ const Sidebar = ({ activeHotel, handleSwitchBack }) => {
           </svg>
           Back to Public Website
         </Link>
+
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-1.5 text-[11px] text-rose-600 hover:text-rose-700 px-2 py-1.5 rounded-lg hover:bg-rose-50 transition font-bold cursor-pointer"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          Logout
+        </button>
       </div>
     </aside>
   );
